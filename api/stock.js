@@ -1,14 +1,13 @@
 const https = require('https');
 
 function Stock() {
-  const IEX_API_TOKE = 'pk_156f3833e9114f32b608e92cc799a480';
   const baseUri = 'https://cloud.iexapis.com/stable/stock/';
 
-  const getPrice = async (stockName) => {
-    const query = `${baseUri}/${stockName}/quote?token=${IEX_API_TOKE}`;
+  const getPrice = (stockName) => {
+    const query = `${baseUri}/${stockName}/quote?token=${process.env.IEX_API_TOKEN}`;
     let quote = {};
 
-    const responsePromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       https.get(query, (res) => {
         console.log('status code:', res.statusCode);
         console.log('headers', res.headers);
@@ -20,19 +19,15 @@ function Stock() {
           resolve(quote);
         });
       }).on('error', (err) => {
-        console.error(`getPrice error: ${err}`);
         reject(err);
       });
     });
-
-    const response = await responsePromise;
-    console.log('latest price', response.latestPrice);
-    return response.latestPrice;
   };
 
   return Object.assign(this, {
-    getInfo() {
-      return getPrice(this.name);
+    async getInfo() {
+      const stockInfo = await getPrice(this.name);
+      return stockInfo.latestPrice;
     },
   });
 }

@@ -6,7 +6,8 @@ http.createServer((req, res) => {
 
   if (req.url === '/api/stock/appl') {
     const stock = Stock({ name: 'aapl' });
-    stock.getInfo();
-    res.end();
+    stock.getInfo().then((stockPrice) => {
+      res.end(stockPrice.toString());
+    });
   }
 }).listen(3001, 'localhost');
