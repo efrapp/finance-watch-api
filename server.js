@@ -6,7 +6,6 @@ http.createServer((req, res) => {
     const stock = Stock({ name: 'aapl' });
 
     stock.getInfo().then((stockInfo) => {
-      console.log(stockInfo);
       res.writeHead(stockInfo.statusCode, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(stockInfo));
     }).catch((err) => {

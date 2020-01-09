@@ -3,13 +3,15 @@ const https = require('https');
 function Stock() {
   const baseUri = 'https://cloud.iexapis.com/stable/stock/';
   const OK = 200;
+  const INTERNAL_ERROR = 500;
 
   const request = (query) => {
     const response = new Promise((resolve, reject) => {
       let quote = {};
+      let statusCode = {};
 
       https.get(query, (res) => {
-        const statusCode = { statusCode: res.statusCode };
+        statusCode = { statusCode: res.statusCode };
 
         if (res.statusCode === OK) {
           res.on('data', (hunk) => {
@@ -23,8 +25,9 @@ function Stock() {
           reject(Object.assign(statusCode, { message: res.statusMessage }));
         }
       }).on('error', (err) => {
-        console.log('External error', err);
-        reject(err);
+        process.stdout.write(err);
+        statusCode.statusCode = INTERNAL_ERROR;
+        reject(Object.assign(statusCode, { message: err }));
       });
     });
 
