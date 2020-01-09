@@ -5,19 +5,24 @@ function Stock() {
 
   const getPrice = (stockName) => {
     const query = `${baseUri}/${stockName}/quote?token=${process.env.IEX_API_TOKEN}`;
-    let quote = {};
 
     return new Promise((resolve, reject) => {
+      let quote = {};
+
       https.get(query, (res) => {
         console.log('status code:', res.statusCode);
         console.log('headers', res.headers);
-        res.on('data', (hunk) => {
-          quote = JSON.parse(hunk);
-        });
+        if (res.statusCode === 200) {
+          res.on('data', (hunk) => {
+            quote = JSON.parse(hunk);
+          });
 
-        res.on('end', () => {
-          resolve(quote);
-        });
+          res.on('end', () => {
+            resolve(quote);
+          });
+        } else {
+          reject(res.statusMessage);
+        }
       }).on('error', (err) => {
         reject(err);
       });
