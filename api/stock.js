@@ -4,10 +4,8 @@ function Stock() {
   const baseUri = 'https://cloud.iexapis.com/stable/stock/';
   const OK = 200;
 
-  const getPrice = (stockName) => {
-    const query = `${baseUri}/${stockName}/quote?token=${process.env.IEX_API_TOKEN}`;
-
-    return new Promise((resolve, reject) => {
+  const request = (query) => {
+    const response = new Promise((resolve, reject) => {
       let quote = {};
 
       https.get(query, (res) => {
@@ -29,32 +27,20 @@ function Stock() {
         reject(err);
       });
     });
+
+    return response;
+  };
+
+  const getPrice = (stockName) => {
+    const query = `${baseUri}/${stockName}/quote?token=${process.env.IEX_API_TOKEN}`;
+
+    return request(query);
   };
 
   const getLogo = (stockName) => {
     const query = `${baseUri}/${stockName}/logo?token=${process.env.IEX_API_TOKEN}`;
 
-    return new Promise((resolve, reject) => {
-      let quote = {};
-
-      https.get(query, (res) => {
-        const statusCode = { statusCode: res.statusCode };
-
-        if (res.statusCode === OK) {
-          res.on('data', (hunk) => {
-            quote = JSON.parse(hunk);
-          });
-
-          res.on('end', () => {
-            resolve(quote);
-          });
-        } else {
-          reject(Object.assign(statusCode, { message: res.statusMessage }));
-        }
-      }).on('error', (err) => {
-        reject(err);
-      });
-    });
+    return request(query);
   };
 
   return Object.assign(this, {
