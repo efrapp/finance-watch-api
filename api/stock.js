@@ -57,7 +57,13 @@ function Stock() {
 
       try {
         const response = await Promise.all([stockPrice, stockLogo, stockNews]);
-        return Object.assign(response[0], response[1], response[2], { statusCode: OK });
+        const unifiedResponse = {
+          latestPrice: response[0].latestPrice,
+          logo: response[1].url,
+          news: response[2][0],
+          statusCode: OK,
+        };
+        return unifiedResponse;
       } catch (error) {
         return Promise.reject(error);
       }
