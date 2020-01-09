@@ -11,8 +11,8 @@ function Stock() {
       let quote = {};
 
       https.get(query, (res) => {
-        console.log('status code:', res.statusCode);
-        console.log('headers', res.headers);
+        const statusCode = { statusCode: res.statusCode };
+
         if (res.statusCode === OK) {
           res.on('data', (hunk) => {
             quote = JSON.parse(hunk);
@@ -22,9 +22,10 @@ function Stock() {
             resolve(quote);
           });
         } else {
-          reject(res.statusMessage);
+          reject(Object.assign(statusCode, { message: res.statusMessage }));
         }
       }).on('error', (err) => {
+        console.log('External error', err);
         reject(err);
       });
     });
@@ -37,6 +38,8 @@ function Stock() {
       let quote = {};
 
       https.get(query, (res) => {
+        const statusCode = { statusCode: res.statusCode };
+
         if (res.statusCode === OK) {
           res.on('data', (hunk) => {
             quote = JSON.parse(hunk);
@@ -46,7 +49,7 @@ function Stock() {
             resolve(quote);
           });
         } else {
-          reject(res.statusMessage);
+          reject(Object.assign(statusCode, { message: res.statusMessage }));
         }
       }).on('error', (err) => {
         reject(err);
@@ -61,9 +64,9 @@ function Stock() {
 
       try {
         const response = await Promise.all([stockPrice, stockLogo]);
-        return response;
+        return Object.assign(response[0], response[1], { statusCode: OK });
       } catch (error) {
-        return new Error(error);
+        return Promise.reject(error);
       }
     },
   });

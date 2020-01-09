@@ -2,15 +2,16 @@ const http = require('http');
 const Stock = require('./api/stock');
 
 http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-
   if (req.url === '/api/stock/aapl') {
-    const stock = Stock({ name: 'appl' });
+    const stock = Stock({ name: 'aapl' });
 
-    stock.getInfo().then((stockPrice) => {
-      res.end(stockPrice.toString());
+    stock.getInfo().then((stockInfo) => {
+      console.log(stockInfo);
+      res.writeHead(stockInfo.statusCode, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(stockInfo));
     }).catch((err) => {
-      res.end(err);
+      res.writeHead(err.statusCode, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(err));
     });
   }
 }).listen(3001, 'localhost');
