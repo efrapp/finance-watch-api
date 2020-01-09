@@ -13,5 +13,8 @@ http.createServer((req, res) => {
       res.writeHead(err.statusCode, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(err));
     });
+  } else {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('Bad Request');
   }
 }).listen(3001, 'localhost');
