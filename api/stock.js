@@ -43,14 +43,21 @@ function Stock() {
     return request(query);
   };
 
+  const getNews = (stockName) => {
+    const query = `${baseUri}/${stockName}/news/last/1?token=${process.env.IEX_API_TOKEN}`;
+
+    return request(query);
+  };
+
   return Object.assign(this, {
     async getInfo() {
       const stockPrice = getPrice(this.name);
       const stockLogo = getLogo(this.name);
+      const stockNews = getNews(this.name);
 
       try {
-        const response = await Promise.all([stockPrice, stockLogo]);
-        return Object.assign(response[0], response[1], { statusCode: OK });
+        const response = await Promise.all([stockPrice, stockLogo, stockNews]);
+        return Object.assign(response[0], response[1], response[2], { statusCode: OK });
       } catch (error) {
         return Promise.reject(error);
       }
