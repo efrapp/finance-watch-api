@@ -25,7 +25,7 @@ function Stock() {
           reject(Object.assign(statusCode, { message: res.statusMessage }));
         }
       }).on('error', (err) => {
-        process.stdout.write(err);
+        process.stdout.write(err.toString());
         statusCode.statusCode = INTERNAL_ERROR;
         reject(Object.assign(statusCode, { message: err }));
       });
