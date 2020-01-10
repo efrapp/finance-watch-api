@@ -7,10 +7,10 @@ function Log() {
   const FAIL = 'fail';
 
   writable.on('error', (err) => {
-    if (err) process.stdout.write(err.toString());
+    if (err) process.stdout.write('File not found. A new file was created');
 
     fs.mkdir(`${process.cwd()}/logs`, { recursive: true }, (mkdirErr) => {
-      if (mkdirErr) process.stdout.write(mkdirErr.toString());
+      if (mkdirErr) process.stdout.write('Error creating the file');
     });
     writable = fs.createWriteStream(`${process.cwd()}/logs/log`);
     writable.write('Application log\r\n');
