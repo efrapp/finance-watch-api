@@ -107,3 +107,4 @@ package-lock.json
 package.json
 .eslintrc.json
 .env
+.DS_Store

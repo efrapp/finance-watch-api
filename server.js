@@ -1,10 +1,13 @@
 const http = require('http');
 const Stock = require('./api/stock');
+const Log = require('./utils/log');
 
 http.createServer((req, res) => {
   if (/\/api\/stock\/[\w]+$/.test(req.url)) {
     const ticker = req.url.match(/[\w?]+$/);
     const stock = Stock({ name: ticker });
+
+    Log();
 
     stock.getInfo().then((stockInfo) => {
       res.writeHead(stockInfo.statusCode, { 'Content-Type': 'application/json' });
