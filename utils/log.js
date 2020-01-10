@@ -18,6 +18,10 @@ function Log() {
       writable.write(log);
       return this;
     },
+    end() {
+      writable.write('\r\n');
+      return this;
+    },
   });
 }
 
