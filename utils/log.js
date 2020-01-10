@@ -2,6 +2,9 @@ const fs = require('fs');
 
 function Log() {
   let writable = fs.createWriteStream(`${process.cwd()}/logs/log`, { flags: 'a' });
+  const OK = 200;
+  const SUCCESS = 'success';
+  const FAIL = 'fail';
 
   writable.on('error', (err) => {
     if (err) process.stdout.write(err.toString());
@@ -26,6 +29,12 @@ function Log() {
       const d = new Date();
       const formattedDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
       return this.record(formattedDate);
+    },
+    recordStatus(statusCode) {
+      const message = 'Request status: ';
+      if (statusCode === OK) return this.record(`${message} ${SUCCESS}`);
+
+      return this.record(`${message} ${FAIL}`);
     },
   });
 }
