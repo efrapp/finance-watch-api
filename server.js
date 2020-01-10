@@ -2,9 +2,9 @@ const http = require('http');
 const Stock = require('./api/stock');
 const Log = require('./utils/log');
 
-http.createServer((req, res) => {
-  const log = Log();
+const log = Log();
 
+http.createServer((req, res) => {
   if (/\/api\/stock\/[\w]+$/.test(req.url)) {
     const ticker = req.url.match(/[\w?]+$/);
     const stock = Stock({ name: ticker });
@@ -21,7 +21,7 @@ http.createServer((req, res) => {
       res.end(JSON.stringify(err));
     });
   } else {
-    log.recordStatus(400).end();
+    log.record(req.url).recordDate().recordStatus(400).end();
     res.writeHead(400, { 'Content-Type': 'text/plain' });
     res.end('Bad Request');
   }

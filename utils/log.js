@@ -18,7 +18,8 @@ function Log() {
 
   return Object.assign(this, {
     record(log) {
-      writable.write(log);
+      const spaces = '    ';
+      writable.write(`${log}${spaces}`);
       return this;
     },
     end() {
