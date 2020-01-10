@@ -22,6 +22,11 @@ function Log() {
       writable.write('\r\n');
       return this;
     },
+    recordDate() {
+      const d = new Date();
+      const formattedDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+      return this.record(formattedDate);
+    },
   });
 }
 

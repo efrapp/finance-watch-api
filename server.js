@@ -8,7 +8,7 @@ http.createServer((req, res) => {
     const stock = Stock({ name: ticker });
     const log = Log();
 
-    log.record(req.url).end();
+    log.record(req.url).recordDate().end();
 
     stock.getInfo().then((stockInfo) => {
       res.writeHead(stockInfo.statusCode, { 'Content-Type': 'application/json' });
