@@ -6,8 +6,9 @@ http.createServer((req, res) => {
   if (/\/api\/stock\/[\w]+$/.test(req.url)) {
     const ticker = req.url.match(/[\w?]+$/);
     const stock = Stock({ name: ticker });
+    const log = Log();
 
-    Log();
+    log.record(req.url).end();
 
     stock.getInfo().then((stockInfo) => {
       res.writeHead(stockInfo.statusCode, { 'Content-Type': 'application/json' });

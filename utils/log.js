@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function Log() {
-  let writable = fs.createWriteStream(`${process.cwd()}/logs/log`);
+  let writable = fs.createWriteStream(`${process.cwd()}/logs/log`, { flags: 'a' });
 
   writable.on('error', (err) => {
     if (err) process.stdout.write(err.toString());
@@ -11,6 +11,13 @@ function Log() {
     });
     writable = fs.createWriteStream(`${process.cwd()}/logs/log`);
     writable.write('Application log');
+  });
+
+  return Object.assign(this, {
+    record(log) {
+      writable.write(log);
+      return this;
+    },
   });
 }
 
