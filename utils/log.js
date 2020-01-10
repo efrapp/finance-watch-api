@@ -13,7 +13,7 @@ function Log() {
       if (mkdirErr) process.stdout.write(mkdirErr.toString());
     });
     writable = fs.createWriteStream(`${process.cwd()}/logs/log`);
-    writable.write('Application log');
+    writable.write('Application log\r\n');
   });
 
   return Object.assign(this, {
